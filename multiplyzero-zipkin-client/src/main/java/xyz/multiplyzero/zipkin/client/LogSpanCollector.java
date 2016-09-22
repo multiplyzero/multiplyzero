@@ -7,7 +7,7 @@ import org.apache.log4j.Logger;
 
 import zipkin.Span;
 
-public class LogSpanCollector extends SpanCollector {
+public class LogSpanCollector extends AbstractSpanCollector {
     private static final Logger logger = Logger.getLogger(LogSpanCollector.class);
 
     @Override

@@ -9,7 +9,7 @@ import java.util.zip.GZIPOutputStream;
 
 import lombok.Getter;
 
-public class HttpSpanCollector extends SpanCollector {
+public class HttpSpanCollector extends AbstractSpanCollector {
     @Getter
     private String zipkinHost;
     private String url;

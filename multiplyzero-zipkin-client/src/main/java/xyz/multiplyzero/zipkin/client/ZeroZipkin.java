@@ -30,7 +30,7 @@ public class ZeroZipkin {
     }
 
     public Span startSpan(String name) {
-        long id = GenerateKey.generateKey();
+        long id = GenerateKey.longKey();
         try {
             Span.Builder parentSpan = spanStore.getSpan();
             Span.Builder builder = Span.builder().id(id).traceId(id).name(name).timestamp(nanoTime());

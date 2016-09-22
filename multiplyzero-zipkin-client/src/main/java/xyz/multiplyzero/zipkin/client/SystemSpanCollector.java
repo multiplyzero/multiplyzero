@@ -5,7 +5,7 @@ import java.util.List;
 
 import zipkin.Span;
 
-public class SystemSpanCollector extends SpanCollector {
+public class SystemSpanCollector extends AbstractSpanCollector {
 
     @Override
     public void sendSpans(byte[] json) throws IOException {
