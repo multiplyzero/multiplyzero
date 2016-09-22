@@ -3,7 +3,6 @@ package xyz.multiplyzero.zipkin.client.sample;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import xyz.multiplyzero.zipkin.client.TraceKeys;
@@ -42,7 +41,6 @@ public class ZipkinHandlerInterceptor extends HandlerInterceptorAdapter {
                 request.getLocalPort());
         zeroZipkin.startSpan(request.getMethod());
         zeroZipkin.sendAnnotation(TraceKeys.SERVER_RECV, endpoint);
-
         request.setAttribute(HTTP_ATTRIBUTE_ENDPOINT, endpoint);
         return true;
     }

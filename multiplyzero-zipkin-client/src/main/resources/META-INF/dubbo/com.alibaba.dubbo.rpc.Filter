@@ -1,1 +1,1 @@
-dubboFilter=xyz.multiplyzero.zipkin.client.sample.ZipkinDubboFilter
+zipkinDubboFilter=xyz.multiplyzero.zipkin.client.sample.ZipkinDubboFilter

@@ -42,7 +42,6 @@ public class ZipkinDubboFilter implements Filter {
             zeroZipkin.sendAnnotation(TraceKeys.CLIENT_SEND, endpoint);
             zeroZipkin.sendBinaryAnnotation("dubbo.consumer.url", context.getUrl().toServiceString(), endpoint);
             zeroZipkin.sendBinaryAnnotation("dubbo.consumer.method", methodAndArgs, endpoint);
-
             rpcInvocation.setAttachment(TransportHeaders.Sampled.getName(), "1");
             rpcInvocation.setAttachment(TransportHeaders.TraceId.getName(), IdConversion.convertToString(span.traceId));
             rpcInvocation.setAttachment(TransportHeaders.SpanId.getName(), IdConversion.convertToString(span.id));
@@ -59,13 +58,12 @@ public class ZipkinDubboFilter implements Filter {
                 zeroZipkin.startSpan(serviceInterface);
             } else {
                 zeroZipkin.startSpan(IdConversion.convertToLong(id), IdConversion.convertToLong(traceId),
-                        IdConversion.convertToLong(parentId), serviceInterface);
+                        parentId == null ? null : IdConversion.convertToLong(parentId), serviceInterface);
             }
             zeroZipkin.sendAnnotation(TraceKeys.SERVER_RECV, endpoint);
             zeroZipkin.sendBinaryAnnotation("dubbo.provider.url", context.getUrl().toServiceString(), endpoint);
             zeroZipkin.sendBinaryAnnotation("dubbo.provider.method", methodAndArgs, endpoint);
         }
-
         try {
             Result result = invoker.invoke(rpcInvocation);
             this.finallydo(isConsumer, isProvider, result.getException(), endpoint);

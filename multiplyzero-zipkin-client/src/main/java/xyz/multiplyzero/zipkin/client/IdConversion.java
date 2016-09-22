@@ -6,9 +6,9 @@ public class IdConversion {
         return Long.toHexString(id);
     }
 
-    public static long convertToLong(final String id) {
-        if (id.length() == 0 || id.length() > 16) {
-            throw new NumberFormatException(id + " should be a <=16 character lower-hex string with no prefix");
+    public static Long convertToLong(final String id) {
+        if (id == null || id.length() == 0 || id.length() > 16) {
+            return null;
         }
 
         long result = 0;

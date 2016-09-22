@@ -25,7 +25,7 @@
         <constructor-arg name="serviceName" value="web" />
     </bean>
 
-    <!--数据库连接字符串加上 ?statementInterceptors=com.yiwugou.reb.zipkin.mysql.MySQLStatementInterceptor -->
+    <!--数据库连接字符串加上 ?statementInterceptors=xyz.multiplyzero.zipkin.client.sample.ZipkinMySQLInterceptor -->
     <bean class="xyz.multiplyzero.zipkin.client.sample.ZipkinMySQLInterceptorManagementBean" destroy-method="close">
         <constructor-arg name="zeroZipkin" ref="zeroZipkin" />
         <constructor-arg name="serviceName" value="mysql-database" />
