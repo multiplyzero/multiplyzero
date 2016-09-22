@@ -22,7 +22,7 @@
 
     <bean id="servletHandlerInterceptor" class="xyz.multiplyzero.zipkin.client.sample.ZipkinHandlerInterceptor">
         <constructor-arg name="zeroZipkin" ref="zeroZipkin" />
-        <constructor-arg name="serviceName" ref="web" />
+        <constructor-arg name="serviceName" value="web" />
     </bean>
 
     <!--数据库连接字符串加上 ?statementInterceptors=com.yiwugou.reb.zipkin.mysql.MySQLStatementInterceptor -->

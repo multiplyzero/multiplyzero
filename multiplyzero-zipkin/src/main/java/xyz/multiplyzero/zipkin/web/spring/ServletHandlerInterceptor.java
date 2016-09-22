@@ -39,7 +39,6 @@ public class ServletHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private Brave brave;
 
-    @Autowired
     public ServletHandlerInterceptor(Brave brave) {
         this.brave = brave;
         this.serverRequestInterceptor = this.brave.serverRequestInterceptor();

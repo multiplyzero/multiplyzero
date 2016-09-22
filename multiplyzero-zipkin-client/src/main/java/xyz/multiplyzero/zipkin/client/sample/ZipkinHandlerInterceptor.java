@@ -26,13 +26,11 @@ public class ZipkinHandlerInterceptor extends HandlerInterceptorAdapter {
 
     private String serviceName;
 
-    @Autowired
     public ZipkinHandlerInterceptor(ZeroZipkin zeroZipkin, String serviceName) {
         this.zeroZipkin = zeroZipkin;
         this.serviceName = serviceName;
     }
 
-    @Autowired
     public ZipkinHandlerInterceptor(ZeroZipkin zeroZipkin) {
         this(zeroZipkin, "web");
     }
