@@ -9,28 +9,12 @@
     <artifactId>multiplyzero-zipkin</artifactId>
     <modules>
         <module>multiplyzero-zipkin-client</module>
-        <module>multiplyzero-zipkin-example</module>
     </modules>
     <dependencies>
         <dependency>
             <groupId>io.zipkin.java</groupId>
             <artifactId>zipkin</artifactId>
             <version>${zipkin-version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave-core</artifactId>
-            <version>${brave.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave-http</artifactId>
-            <version>${brave.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>io.zipkin.brave</groupId>
-            <artifactId>brave-spancollector-http</artifactId>
-            <version>${brave.version}</version>
         </dependency>
     </dependencies>
 
