@@ -29,4 +29,8 @@
             <version>${brave.version}</version>
         </dependency>
     </dependencies>
+    <modules>
+        <module>multiplyzero-zipkin-client</module>
+        <module>multiplyzero-zipkin-example</module>
+    </modules>
 </project>
