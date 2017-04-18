@@ -9,8 +9,8 @@
         <module>multiplyzero-zipkin</module>
         <module>multiplyzero-zipkin-client</module>
         <module>multiplyzero-utils</module>
-    <module>multiplyzero-promise</module>
-  </modules>
+        <module>multiplyzero-promise</module>
+    </modules>
 
     <properties>
         <project.version>1.0.0</project.version>

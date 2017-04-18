@@ -3,11 +3,11 @@ package xyz.multiplyzero.zipkin.client.sample;
 import java.util.Map;
 
 import lombok.Setter;
+import xyz.multiplyzero.util.CommonUtils;
 import xyz.multiplyzero.zipkin.client.TraceKeys;
 import xyz.multiplyzero.zipkin.client.ZeroZipkin;
 import xyz.multiplyzero.zipkin.client.utils.InetAddressUtils;
 import xyz.multiplyzero.zipkin.client.utils.MethodDone;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
 import zipkin.Endpoint;
 
 public class ZipkinMethodAspect {
@@ -43,7 +43,7 @@ public class ZipkinMethodAspect {
     private void methodFinally(Throwable e, Endpoint endpoint) {
         zeroZipkin.sendAnnotation(TraceKeys.CLIENT_RECV, endpoint);
         if (e != null) {
-            zeroZipkin.sendBinaryAnnotation(serviceName + TraceKeys.SUFFIX_ERROR, ZipkinUtils.errorToString(e),
+            zeroZipkin.sendBinaryAnnotation(serviceName + TraceKeys.SUFFIX_ERROR, CommonUtils.errorToString(e),
                     endpoint);
             zeroZipkin.sendBinaryAnnotation(serviceName + TraceKeys.SUFFIX_BACK, TraceKeys.RESULT_FAILED, endpoint);
         } else {

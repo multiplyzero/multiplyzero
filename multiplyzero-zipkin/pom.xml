@@ -7,6 +7,10 @@
     </parent>
     <packaging>pom</packaging>
     <artifactId>multiplyzero-zipkin</artifactId>
+    <modules>
+        <module>multiplyzero-zipkin-client</module>
+        <module>multiplyzero-zipkin-example</module>
+    </modules>
     <dependencies>
         <dependency>
             <groupId>io.zipkin.java</groupId>
@@ -29,8 +33,5 @@
             <version>${brave.version}</version>
         </dependency>
     </dependencies>
-    <modules>
-        <module>multiplyzero-zipkin-client</module>
-        <module>multiplyzero-zipkin-example</module>
-    </modules>
+
 </project>

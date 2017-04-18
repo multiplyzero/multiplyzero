@@ -5,15 +5,15 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import xyz.multiplyzero.util.CommonUtils;
 import xyz.multiplyzero.zipkin.client.TraceKeys;
 import xyz.multiplyzero.zipkin.client.ZeroZipkin;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
 import zipkin.Endpoint;
 
 /**
- * 
+ *
  * ServletHandlerInterceptor
- * 
+ *
  * @author zhanxiaoyong
  *
  * @since 2016年9月19日 下午4:53:39
@@ -37,7 +37,7 @@ public class ZipkinHandlerInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response,
             final Object handler) {
-        Endpoint endpoint = Endpoint.create(serviceName, ZipkinUtils.ipToInt(request.getLocalAddr()),
+        Endpoint endpoint = Endpoint.create(serviceName, CommonUtils.ipToInt(request.getLocalAddr()),
                 request.getLocalPort());
         zeroZipkin.startSpan(request.getMethod());
         zeroZipkin.sendAnnotation(TraceKeys.SERVER_RECV, endpoint);

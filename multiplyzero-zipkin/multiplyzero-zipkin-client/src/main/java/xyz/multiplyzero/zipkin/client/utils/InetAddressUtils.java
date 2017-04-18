@@ -6,6 +6,8 @@ import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.Enumeration;
 
+import xyz.multiplyzero.util.CommonUtils;
+
 public class InetAddressUtils {
 
     private static InetAddress localHostLANAddress() throws UnknownHostException {
@@ -13,9 +15,9 @@ public class InetAddressUtils {
             InetAddress candidateAddress = null;
             for (Enumeration<NetworkInterface> ifaces = NetworkInterface.getNetworkInterfaces(); ifaces
                     .hasMoreElements();) {
-                NetworkInterface iface = (NetworkInterface) ifaces.nextElement();
+                NetworkInterface iface = ifaces.nextElement();
                 for (Enumeration<InetAddress> inetAddrs = iface.getInetAddresses(); inetAddrs.hasMoreElements();) {
-                    InetAddress inetAddr = (InetAddress) inetAddrs.nextElement();
+                    InetAddress inetAddr = inetAddrs.nextElement();
                     if (!inetAddr.isLoopbackAddress()) {
                         if (inetAddr.isSiteLocalAddress()) {
                             return inetAddr;
@@ -47,7 +49,7 @@ public class InetAddressUtils {
             return ByteBuffer.wrap(localHostLANAddress().getAddress()).getInt();
         } catch (UnknownHostException e) {
             e.printStackTrace();
-            return ZipkinUtils.ipToInt("127.0.0.1");
+            return CommonUtils.ipToInt("127.0.0.1");
         }
     }
 }

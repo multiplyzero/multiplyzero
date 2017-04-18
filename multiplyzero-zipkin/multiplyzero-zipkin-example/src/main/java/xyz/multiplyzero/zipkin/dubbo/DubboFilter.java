@@ -16,18 +16,16 @@ import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 import com.github.kristofa.brave.Brave;
 import com.github.kristofa.brave.ClientRequestAdapter;
-import com.github.kristofa.brave.ClientResponseAdapter;
 import com.github.kristofa.brave.IdConversion;
 import com.github.kristofa.brave.KeyValueAnnotation;
 import com.github.kristofa.brave.ServerRequestAdapter;
-import com.github.kristofa.brave.ServerResponseAdapter;
 import com.github.kristofa.brave.SpanId;
 import com.github.kristofa.brave.TraceData;
 import com.github.kristofa.brave.http.BraveHttpHeaders;
 import com.twitter.zipkin.gen.Endpoint;
 
 import lombok.Setter;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
+import xyz.multiplyzero.util.CommonUtils;
 
 @Activate(group = { Constants.PROVIDER, Constants.CONSUMER })
 public class DubboFilter implements Filter {
@@ -42,7 +40,7 @@ public class DubboFilter implements Filter {
         final String serviceInterface = context.getUrl().getServiceInterface();
         String methodName = invocation.getMethodName();
         Object[] args = invocation.getArguments();
-        final String methodAndArgs = ZipkinUtils.methodAndArgs(methodName, args);
+        final String methodAndArgs = CommonUtils.methodAndArgs(methodName, args);
         boolean isConsumer = context.isConsumerSide();
         boolean isProvider = context.isProviderSide();
         final RpcInvocation rpcInvocation = (RpcInvocation) invocation;
@@ -51,7 +49,7 @@ public class DubboFilter implements Filter {
             brave.clientRequestInterceptor().handle(new ClientRequestAdapter() {
                 @Override
                 public Endpoint serverAddress() {
-                    Endpoint endPoint = Endpoint.create("dubbo.consumer", ZipkinUtils.ipToInt(host), port);
+                    Endpoint endPoint = Endpoint.create("dubbo.consumer", CommonUtils.ipToInt(host), port);
                     return endPoint;
                 }
 
@@ -139,32 +137,26 @@ public class DubboFilter implements Filter {
 
     private void finallydo(boolean isConsumer, boolean isProvider, final Throwable e) {
         if (isConsumer) {
-            brave.clientResponseInterceptor().handle(new ClientResponseAdapter() {
-                @Override
-                public Collection<KeyValueAnnotation> responseAnnotations() {
-                    Collection<KeyValueAnnotation> kvs = new ArrayList<>();
-                    if (e != null) {
-                        kvs.add(KeyValueAnnotation.create("dubbo.consumer.error", ZipkinUtils.errorToString(e)));
-                        kvs.add(KeyValueAnnotation.create("dubbo.consumer.success", "faild"));
-                    } else {
-                        kvs.add(KeyValueAnnotation.create("dubbo.consumer.success", "success"));
-                    }
-                    return kvs;
+            brave.clientResponseInterceptor().handle(() -> {
+                Collection<KeyValueAnnotation> kvs = new ArrayList<>();
+                if (e != null) {
+                    kvs.add(KeyValueAnnotation.create("dubbo.consumer.error", CommonUtils.errorToString(e)));
+                    kvs.add(KeyValueAnnotation.create("dubbo.consumer.success", "faild"));
+                } else {
+                    kvs.add(KeyValueAnnotation.create("dubbo.consumer.success", "success"));
                 }
+                return kvs;
             });
         } else if (isProvider) {
-            brave.serverResponseInterceptor().handle(new ServerResponseAdapter() {
-                @Override
-                public Collection<KeyValueAnnotation> responseAnnotations() {
-                    Collection<KeyValueAnnotation> kvs = new ArrayList<>();
-                    if (e != null) {
-                        kvs.add(KeyValueAnnotation.create("dubbo.provider.error", ZipkinUtils.errorToString(e)));
-                        kvs.add(KeyValueAnnotation.create("dubbo.provider.success", "faild"));
-                    } else {
-                        kvs.add(KeyValueAnnotation.create("dubbo.provider.success", "success"));
-                    }
-                    return kvs;
+            brave.serverResponseInterceptor().handle(() -> {
+                Collection<KeyValueAnnotation> kvs = new ArrayList<>();
+                if (e != null) {
+                    kvs.add(KeyValueAnnotation.create("dubbo.provider.error", CommonUtils.errorToString(e)));
+                    kvs.add(KeyValueAnnotation.create("dubbo.provider.success", "faild"));
+                } else {
+                    kvs.add(KeyValueAnnotation.create("dubbo.provider.success", "success"));
                 }
+                return kvs;
             });
         }
     }

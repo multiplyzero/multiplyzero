@@ -3,9 +3,9 @@ package xyz.multiplyzero.zipkin.aspect;
 import com.github.kristofa.brave.Brave;
 
 import lombok.Setter;
+import xyz.multiplyzero.util.CommonUtils;
 import xyz.multiplyzero.zipkin.client.TraceKeys;
 import xyz.multiplyzero.zipkin.client.utils.MethodDone;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
 
 public class LocalMethodAspect {
     @Setter
@@ -30,7 +30,7 @@ public class LocalMethodAspect {
         brave.localTracer().submitAnnotation(annotationPrefix + TraceKeys.SUFFIX_END);
         if (e != null) {
             brave.localTracer().submitBinaryAnnotation(annotationPrefix + TraceKeys.SUFFIX_ERROR,
-                    ZipkinUtils.errorToString(e));
+                    CommonUtils.errorToString(e));
             brave.localTracer().submitBinaryAnnotation(annotationPrefix + TraceKeys.SUFFIX_BACK,
                     TraceKeys.RESULT_FAILED);
         } else {

@@ -12,14 +12,14 @@ import com.mysql.jdbc.ResultSetInternalMethods;
 import com.mysql.jdbc.Statement;
 import com.mysql.jdbc.StatementInterceptorV2;
 
+import xyz.multiplyzero.util.CommonUtils;
 import xyz.multiplyzero.zipkin.client.TraceKeys;
 import xyz.multiplyzero.zipkin.client.ZeroZipkin;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
 import zipkin.Endpoint;
 
 /**
  * spring.xml
- * 
+ *
  * <pre>
  * {@code
 < bean class="package.ZipkinMySQLInterceptorManagementBean" destroy-method="close">
@@ -27,9 +27,9 @@ import zipkin.Endpoint;
 < /bean>
  * }
  * </pre>
- * 
+ *
  * jdbc.properties 连接字符串添加
- * 
+ *
  * <pre>
  * ?statementInterceptors=package.ZipkinMySQLInterceptor
  * </pre>
@@ -115,7 +115,7 @@ public class ZipkinMySQLInterceptor implements StatementInterceptorV2 {
             return Endpoint.create(serviceName, ipv4, port);
         } catch (Exception e) {
             e.printStackTrace();
-            return Endpoint.create("mysql", ZipkinUtils.ipToInt("127.0.0.1"), 3306);
+            return Endpoint.create("mysql", CommonUtils.ipToInt("127.0.0.1"), 3306);
         }
 
     }

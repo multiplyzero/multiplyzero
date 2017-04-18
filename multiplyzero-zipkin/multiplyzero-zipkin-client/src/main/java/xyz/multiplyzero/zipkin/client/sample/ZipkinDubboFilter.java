@@ -11,11 +11,11 @@ import com.alibaba.dubbo.rpc.RpcException;
 import com.alibaba.dubbo.rpc.RpcInvocation;
 
 import lombok.Setter;
+import xyz.multiplyzero.util.CommonUtils;
 import xyz.multiplyzero.zipkin.client.IdConversion;
 import xyz.multiplyzero.zipkin.client.TraceKeys;
 import xyz.multiplyzero.zipkin.client.TransportHeaders;
 import xyz.multiplyzero.zipkin.client.ZeroZipkin;
-import xyz.multiplyzero.zipkin.client.utils.ZipkinUtils;
 import zipkin.Endpoint;
 import zipkin.Span;
 
@@ -32,11 +32,11 @@ public class ZipkinDubboFilter implements Filter {
         String serviceInterface = context.getUrl().getServiceInterface();
         String methodName = invocation.getMethodName();
         Object[] args = invocation.getArguments();
-        String methodAndArgs = ZipkinUtils.methodAndArgs(methodName, args);
+        String methodAndArgs = CommonUtils.methodAndArgs(methodName, args);
         boolean isConsumer = context.isConsumerSide();
         boolean isProvider = context.isProviderSide();
         RpcInvocation rpcInvocation = (RpcInvocation) invocation;
-        Endpoint endpoint = Endpoint.create("dubbo.consumer", ZipkinUtils.ipToInt(host), port);
+        Endpoint endpoint = Endpoint.create("dubbo.consumer", CommonUtils.ipToInt(host), port);
         if (isConsumer) {// 消费者时候 发出请求 clientSend clientResive
             Span span = zeroZipkin.startSpan(serviceInterface);
             zeroZipkin.sendAnnotation(TraceKeys.CLIENT_SEND, endpoint);
@@ -78,7 +78,7 @@ public class ZipkinDubboFilter implements Filter {
         if (isConsumer) {
             zeroZipkin.sendAnnotation(TraceKeys.CLIENT_RECV, endpoint);
             if (e != null) {
-                zeroZipkin.sendBinaryAnnotation("dubbo.consumer.error", ZipkinUtils.errorToString(e), endpoint);
+                zeroZipkin.sendBinaryAnnotation("dubbo.consumer.error", CommonUtils.errorToString(e), endpoint);
                 zeroZipkin.sendBinaryAnnotation("dubbo.consumer.back", "failed", endpoint);
             } else {
                 zeroZipkin.sendBinaryAnnotation("dubbo.consumer.back", "success", endpoint);
@@ -86,7 +86,7 @@ public class ZipkinDubboFilter implements Filter {
         } else if (isProvider) {
             zeroZipkin.sendAnnotation(TraceKeys.SERVER_SEND, endpoint);
             if (e != null) {
-                zeroZipkin.sendBinaryAnnotation("dubbo.provider.error", ZipkinUtils.errorToString(e), endpoint);
+                zeroZipkin.sendBinaryAnnotation("dubbo.provider.error", CommonUtils.errorToString(e), endpoint);
                 zeroZipkin.sendBinaryAnnotation("dubbo.provider.back", "failed", endpoint);
             } else {
                 zeroZipkin.sendBinaryAnnotation("dubbo.provider.back", "success", endpoint);
