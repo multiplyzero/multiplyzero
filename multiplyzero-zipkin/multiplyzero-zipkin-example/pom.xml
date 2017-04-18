@@ -2,11 +2,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>xyz.multiplyzero</groupId>
-        <artifactId>multiplyzero</artifactId>
+        <artifactId>multiplyzero-zipkin</artifactId>
         <version>1.0.0</version>
     </parent>
-    <packaging>pom</packaging>
-    <artifactId>multiplyzero-zipkin</artifactId>
+    <artifactId>multiplyzero-zipkin-example</artifactId>
     <dependencies>
         <dependency>
             <groupId>xyz.multiplyzero</groupId>

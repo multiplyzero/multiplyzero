@@ -8,13 +8,18 @@ import com.twitter.zipkin.gen.Endpoint;
 import com.twitter.zipkin.gen.Span;
 
 public class ThreadLocalStackSpanState implements ServerClientAndLocalSpanState {
-    private final static ThreadLocal<ServerSpan> currentServerSpan = new ThreadLocal<ServerSpan>() {
+    private final static ThreadLocal<Stack<ServerSpan>> currentServerSpan = new ThreadLocal<Stack<ServerSpan>>() {
         @Override
-        protected ServerSpan initialValue() {
-            return ServerSpan.create(null);
+        protected Stack<ServerSpan> initialValue() {
+            return new Stack<>();
         }
     };
-    private final static ThreadLocal<Span> currentClientSpan = new ThreadLocal<Span>();
+    private final static ThreadLocal<Stack<Span>> currentClientSpan = new ThreadLocal<Stack<Span>>() {
+        @Override
+        protected Stack<Span> initialValue() {
+            return new Stack<>();
+        }
+    };
 
     private final static ThreadLocal<Stack<Span>> currentLocalSpan = new ThreadLocal<Stack<Span>>() {
         @Override
@@ -38,15 +43,15 @@ public class ThreadLocalStackSpanState implements ServerClientAndLocalSpanState 
 
     @Override
     public ServerSpan getCurrentServerSpan() {
-        return currentServerSpan.get();
+        return currentServerSpan.get().peek();
     }
 
     @Override
     public void setCurrentServerSpan(final ServerSpan span) {
         if (span == null) {
-            currentServerSpan.remove();
+            currentServerSpan.get().pop();
         } else {
-            currentServerSpan.set(span);
+            currentServerSpan.get().push(span);
         }
     }
 
@@ -57,17 +62,17 @@ public class ThreadLocalStackSpanState implements ServerClientAndLocalSpanState 
 
     @Override
     public Span getCurrentClientSpan() {
-        return currentClientSpan.get();
+        return currentClientSpan.get().peek();
     }
 
     @Override
     public void setCurrentClientSpan(final Span span) {
-        currentClientSpan.set(span);
+        currentClientSpan.get().push(span);
     }
 
     @Override
     public Boolean sample() {
-        return currentServerSpan.get().getSample();
+        return currentServerSpan.get().peek().getSample();
     }
 
     @Override
