@@ -6,6 +6,9 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -19,8 +22,14 @@ public @interface FeignClient {
 
     int readTimeoutMillis() default 60 * 1000;
 
-    Class<?> encoder() default void.class;
+    Class<? extends Encoder> encoder() default Encoder.Default.class;
 
-    Class<?> decoder() default void.class;
+    Class<? extends Decoder> decoder() default Decoder.Default.class;
+
+    int maxAttempts() default 100;
+
+    long period() default 1000;
+
+    long maxPeriod() default 5;
 
 }
