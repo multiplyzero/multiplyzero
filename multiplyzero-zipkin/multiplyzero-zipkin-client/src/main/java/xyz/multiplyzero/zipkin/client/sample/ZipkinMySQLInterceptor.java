@@ -73,7 +73,7 @@ public class ZipkinMySQLInterceptor implements StatementInterceptorV2 {
         if (zeroZipkin == null) {
             return null;
         }
-        Endpoint endpoint = this.getEndpoint(connection);
+        Endpoint endpoint = this.createEndpoint(connection);
         zeroZipkin.sendAnnotation(TraceKeys.CLIENT_RECV, endpoint);
         try {
             if (warningCount > 0) {
@@ -89,13 +89,13 @@ public class ZipkinMySQLInterceptor implements StatementInterceptorV2 {
     }
 
     private void beginTrace(final String sql, final Connection connection) throws SQLException {
-        Endpoint endpoint = this.getEndpoint(connection);
+        Endpoint endpoint = this.createEndpoint(connection);
         zeroZipkin.startSpan("query");
         zeroZipkin.sendAnnotation(TraceKeys.CLIENT_SEND, endpoint);
         zeroZipkin.sendBinaryAnnotation(TraceKeys.SQL_QUERY, sql, endpoint);
     }
 
-    private Endpoint getEndpoint(Connection connection) {
+    private Endpoint createEndpoint(Connection connection) {
         try {
             InetAddress address = InetAddress.getByName(connection.getHost());
             int ipv4 = ByteBuffer.wrap(address.getAddress()).getInt();
@@ -117,7 +117,6 @@ public class ZipkinMySQLInterceptor implements StatementInterceptorV2 {
             e.printStackTrace();
             return Endpoint.create("mysql", CommonUtils.ipToInt("127.0.0.1"), 3306);
         }
-
     }
 
     @Override

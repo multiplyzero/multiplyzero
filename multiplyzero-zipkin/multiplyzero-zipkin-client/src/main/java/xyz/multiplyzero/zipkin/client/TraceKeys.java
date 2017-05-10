@@ -26,6 +26,7 @@ public class TraceKeys {
     public static final String HTTP_RESPONSE_SIZE = "http.response.size";
 
     public static final String SQL_QUERY = "sql.query";
+    public static final String SQL_TIME = "sql.time";
 
     public static final String SUFFIX_BEGIN = ".begin";
     public static final String SUFFIX_END = ".end";
