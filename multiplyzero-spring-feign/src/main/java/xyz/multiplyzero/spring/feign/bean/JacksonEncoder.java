@@ -1,4 +1,7 @@
-package com.yiwugou.product.bean;
+package xyz.multiplyzero.spring.feign.bean;
+
+import java.lang.reflect.Type;
+import java.util.Collections;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -6,9 +9,6 @@ import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-
-import java.lang.reflect.Type;
-import java.util.Collections;
 
 import feign.RequestTemplate;
 import feign.codec.EncodeException;

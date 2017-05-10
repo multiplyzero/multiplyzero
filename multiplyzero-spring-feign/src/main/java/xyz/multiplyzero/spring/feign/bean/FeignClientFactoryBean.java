@@ -1,4 +1,4 @@
-package com.yiwugou.product.bean;
+package xyz.multiplyzero.spring.feign.bean;
 
 import org.springframework.beans.factory.FactoryBean;
 

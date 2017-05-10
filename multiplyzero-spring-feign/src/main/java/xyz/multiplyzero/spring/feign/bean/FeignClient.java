@@ -1,4 +1,4 @@
-package com.yiwugou.product.bean;
+package xyz.multiplyzero.spring.feign.bean;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
