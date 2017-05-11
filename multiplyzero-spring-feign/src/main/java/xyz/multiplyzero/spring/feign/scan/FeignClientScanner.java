@@ -1,18 +1,38 @@
-package xyz.multiplyzero.spring.feign.bean;
+package xyz.multiplyzero.spring.feign.scan;
 
 import java.util.Set;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
+import com.netflix.discovery.EurekaClient;
+import com.netflix.loadbalancer.Server;
+
 import feign.Feign;
-import feign.Request;
-import feign.Retryer;
+import feign.codec.Decoder;
+import feign.codec.Encoder;
+import lombok.Setter;
+import xyz.multiplyzero.spring.feign.anno.FeignClient;
+import xyz.multiplyzero.spring.feign.bean.FeignClientFactoryBean;
+import xyz.multiplyzero.spring.feign.factory.EurekaClientFactory;
+import xyz.multiplyzero.spring.feign.factory.FeignFactory;
+import xyz.multiplyzero.spring.feign.factory.ServerFactory;
+import xyz.multiplyzero.spring.feign.factory.UrlFactory;
 
 public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
+    @Setter
+    private String defaultNamespace;
+    @Setter
+    private String defaultConfigFile;
+    @Setter
+    private Decoder defaultDecoder;
+    @Setter
+    private Encoder defaultEncoder;
+
     public FeignClientScanner(BeanDefinitionRegistry registry) {
         super(registry);
     }
@@ -30,24 +50,19 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                 GenericBeanDefinition definition = (GenericBeanDefinition) holder.getBeanDefinition();
                 String beanClassName = definition.getBeanClassName();
                 Class<?> clazz = Class.forName(beanClassName);
-
                 FeignClient feignClient = clazz.getAnnotation(FeignClient.class);
-                String value = feignClient.value();
+                String url = feignClient.value();
+                if (StringUtils.isBlank(url)) {
+                    String eurekaNamespace = feignClient.eurekaNamespace();
+                    String eurekaConfigFile = feignClient.eurekaConfigFile();
 
-                String url = feignClient.url();
-
-                FeignClientFactoryBean<Object> factoryBean = new FeignClientFactoryBean<>();
-
-                Retryer retryer = new Retryer.Default(feignClient.period(), feignClient.maxPeriod(),
-                        feignClient.maxAttempts());
-                Request.Options options = new Request.Options(feignClient.connectTimeoutMillis(),
-                        feignClient.readTimeoutMillis());
-
-                Feign.Builder builder = Feign.builder().retryer(retryer).options(options);
-                builder.decoder(feignClient.decoder().newInstance()).encoder(feignClient.encoder().newInstance());
+                    EurekaClient eurekaClient = EurekaClientFactory.getInstants(eurekaNamespace, eurekaConfigFile);
+                    Server server = ServerFactory.getInstants(eurekaClient, feignClient);
+                    url = UrlFactory.getInstants(server.getHost(), server.getPort());
+                }
+                Feign.Builder builder = FeignFactory.getInstants(feignClient, this.defaultDecoder, this.defaultEncoder);
                 Object obj = builder.target(clazz, url);
-
-                definition.setBeanClass(factoryBean.getClass());
+                definition.setBeanClass(FeignClientFactoryBean.class);
                 definition.getPropertyValues().addPropertyValue("mapperInterface", clazz);
                 definition.getPropertyValues().addPropertyValue("object", obj);
             }

@@ -1,4 +1,4 @@
-package xyz.multiplyzero.spring.feign.bean;
+package xyz.multiplyzero.spring.feign.code.jackson;
 
 import java.io.BufferedReader;
 import java.io.IOException;

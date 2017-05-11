@@ -68,6 +68,7 @@
         <zipkin-version>1.10.0</zipkin-version>
         <ant-contrib.version>1.0b3</ant-contrib.version>
         <ant-nodeps.version>1.8.1</ant-nodeps.version>
+        <eureka.version>1.6.2</eureka.version>
     </properties>
 
     <dependencyManagement>
@@ -209,4 +210,31 @@
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>jdk17</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <artifactId>maven-jar-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                                <configuration>
+                                    <classifier>jdk17</classifier>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <java.version>1.7</java.version>
+            </properties>
+        </profile>
+    </profiles>
 </project>

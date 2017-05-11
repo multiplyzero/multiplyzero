@@ -1,4 +1,4 @@
-package xyz.multiplyzero.spring.feign.bean;
+package xyz.multiplyzero.spring.feign.code.jackson;
 
 import java.lang.reflect.Type;
 import java.util.Collections;

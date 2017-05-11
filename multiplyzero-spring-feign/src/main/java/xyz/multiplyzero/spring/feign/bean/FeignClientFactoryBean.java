@@ -14,12 +14,13 @@ public class FeignClientFactoryBean<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        return object;
+        System.err.println("FeignClientFactoryBean get object");
+        return this.object;
     }
 
     @Override
     public Class<T> getObjectType() {
-        return mapperInterface;
+        return this.mapperInterface;
     }
 
     @Override
