@@ -22,6 +22,7 @@ import xyz.multiplyzero.spring.feign.factory.EurekaClientFactory;
 import xyz.multiplyzero.spring.feign.factory.FeignFactory;
 import xyz.multiplyzero.spring.feign.factory.ServerFactory;
 import xyz.multiplyzero.spring.feign.factory.UrlFactory;
+import xyz.multiplyzero.spring.feign.utils.ObjectUtils;
 
 public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
     @Setter
@@ -53,9 +54,10 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                 FeignClient feignClient = clazz.getAnnotation(FeignClient.class);
                 String url = feignClient.value();
                 if (!StringUtils.hasText(url)) {
-                    String eurekaNamespace = feignClient.eurekaNamespace();
-                    String eurekaConfigFile = feignClient.eurekaConfigFile();
-
+                    String eurekaNamespace = ObjectUtils.defaultIfHasText(feignClient.eurekaNamespace(),
+                            this.defaultNamespace);
+                    String eurekaConfigFile = ObjectUtils.defaultIfHasText(feignClient.eurekaConfigFile(),
+                            this.defaultConfigFile);
                     EurekaClient eurekaClient = EurekaClientFactory.getInstants(eurekaNamespace, eurekaConfigFile);
                     Server server = ServerFactory.getInstants(eurekaClient, feignClient);
                     url = UrlFactory.getInstants(server.getHost(), server.getPort());

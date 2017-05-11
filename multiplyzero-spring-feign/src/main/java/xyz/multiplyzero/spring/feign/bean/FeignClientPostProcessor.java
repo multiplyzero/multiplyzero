@@ -19,9 +19,9 @@ import xyz.multiplyzero.spring.feign.scan.FeignClientScanner;
 public class FeignClientPostProcessor implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
 
     @Setter
-    private String defaultNamespace;
+    private String defaultNamespace = Constants.DEFAULT_CONFIG_NAMESPACE;
     @Setter
-    private String defaultConfigFile;
+    private String defaultConfigFile = Constants.DEFAULT_CONFIG_FILE;
     @Setter
     private Decoder defaultDecoder;
     @Setter
