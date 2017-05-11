@@ -20,8 +20,9 @@ public class FeignClientPostProcessor implements ApplicationContextAware, BeanDe
 
     @Setter
     private String defaultNamespace = Constants.DEFAULT_CONFIG_NAMESPACE;
-    @Setter
+
     private String defaultConfigFile = Constants.DEFAULT_CONFIG_FILE;
+
     @Setter
     private Decoder defaultDecoder;
     @Setter
@@ -56,7 +57,11 @@ public class FeignClientPostProcessor implements ApplicationContextAware, BeanDe
         scanner.setResourceLoader(this.applicationContext);
         scanner.addIncludeFilter(new AnnotationTypeFilter(FeignClient.class));
         scanner.scan(this.packages);
+    }
 
+    public void setDefaultConfigFile(String defaultConfigFile) {
+        this.defaultConfigFile = defaultConfigFile;
+        System.setProperty("eureka.client.props", defaultConfigFile);
     }
 
 }
