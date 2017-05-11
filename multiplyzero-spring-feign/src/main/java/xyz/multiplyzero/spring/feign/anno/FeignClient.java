@@ -12,6 +12,14 @@ import feign.codec.Decoder;
 import feign.codec.Encoder;
 import xyz.multiplyzero.spring.feign.code.jackson.JacksonDecoder;
 
+/**
+ *
+ * FeignClient
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:52:34
+ */
 @Target(ElementType.TYPE)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
@@ -46,10 +54,34 @@ public @interface FeignClient {
 
     Class<? extends IRule> rule() default IRule.class;
 
+    /**
+     * 重试次数
+     */
     int retryMaxAttempts() default 100;
 
+    /**
+     * <pre>
+     * 不好解释 看源码吧 ms
+     * <code>
+     * long nextMaxInterval() {
+     *     long interval = (long) (period * Math.pow(1.5, attempt - 1));
+     *     return interval > maxPeriod ? maxPeriod : interval;
+     * }
+     * </code>
+     * </pre>
+     *
+     * @see feign.Retryer
+     */
     long retryPeriod() default 1000;
 
+    /**
+     * 重试最大间隔时间 ms
+     */
     long retryMaxPeriod() default 5;
+
+    /**
+     * 并发数
+     */
+    int executes() default 40;
 
 }

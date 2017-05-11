@@ -13,6 +13,14 @@ import com.netflix.niws.loadbalancer.DiscoveryEnabledServer;
 
 import xyz.multiplyzero.spring.feign.anno.FeignClient;
 
+/**
+ *
+ * ServerFactory
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:54:09
+ */
 public class ServerFactory {
 
     public static Server getInstants(final EurekaClient eurekaClient, FeignClient feignClient) {

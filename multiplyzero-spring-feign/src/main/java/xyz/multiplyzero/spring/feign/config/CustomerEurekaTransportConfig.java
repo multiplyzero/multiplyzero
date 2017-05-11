@@ -5,6 +5,14 @@ import com.netflix.discovery.shared.transport.EurekaTransportConfig;
 
 import xyz.multiplyzero.spring.feign.constants.TransportConfigConstants;
 
+/**
+ *
+ * CustomerEurekaTransportConfig
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:16
+ */
 public class CustomerEurekaTransportConfig implements EurekaTransportConfig {
 
     private static final String SUB_NAMESPACE = TransportConfigConstants.TRANSPORT_CONFIG_SUB_NAMESPACE + ".";

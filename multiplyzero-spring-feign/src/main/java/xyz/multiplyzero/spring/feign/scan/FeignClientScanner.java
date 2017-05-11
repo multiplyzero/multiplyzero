@@ -24,6 +24,14 @@ import xyz.multiplyzero.spring.feign.factory.ServerFactory;
 import xyz.multiplyzero.spring.feign.factory.UrlFactory;
 import xyz.multiplyzero.spring.feign.utils.ObjectUtils;
 
+/**
+ *
+ * FeignClientScanner
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:54:37
+ */
 public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
     @Setter
     private String defaultNamespace;

@@ -1,5 +1,13 @@
 package xyz.multiplyzero.spring.feign.constants;
 
+/**
+ *
+ * EurekaConfigConstants
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:27
+ */
 final public class EurekaConfigConstants {
     public static final String CLIENT_REGION_FALLBACK_KEY = "eureka.region";
 

@@ -1,5 +1,13 @@
 package xyz.multiplyzero.spring.feign.constants;
 
+/**
+ *
+ * EurekaInstanceConfigConstants
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:33
+ */
 public final class EurekaInstanceConfigConstants {
     // NOTE: all keys are before any prefixes are applied
     public static final String INSTANCE_ID_KEY = "instanceId";

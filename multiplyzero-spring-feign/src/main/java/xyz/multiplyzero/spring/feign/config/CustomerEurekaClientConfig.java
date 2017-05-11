@@ -15,7 +15,15 @@ import xyz.multiplyzero.spring.feign.constants.Constants;
 import xyz.multiplyzero.spring.feign.constants.EurekaConfigConstants;
 import xyz.multiplyzero.spring.feign.constants.EurekaConfigConstants.Values;
 
-//@Singleton
+/**
+ *
+ * CustomerEurekaClientConfig
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:06
+ */
+// @Singleton
 // @ProvidedBy(CustomerEurekaClientConfigProvider.class)
 public class CustomerEurekaClientConfig implements EurekaClientConfig {
 

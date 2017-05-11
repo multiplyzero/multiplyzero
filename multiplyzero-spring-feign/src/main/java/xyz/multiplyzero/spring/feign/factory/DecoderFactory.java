@@ -5,6 +5,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import feign.codec.Decoder;
 
+/**
+ *
+ * DecoderFactory
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:44
+ */
 public class DecoderFactory {
     private static final Map<String, Decoder> DATA_MAP = new ConcurrentHashMap<>();
 

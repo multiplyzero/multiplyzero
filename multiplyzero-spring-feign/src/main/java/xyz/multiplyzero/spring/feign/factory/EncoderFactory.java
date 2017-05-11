@@ -5,6 +5,14 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import feign.codec.Encoder;
 
+/**
+ *
+ * EncoderFactory
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:48
+ */
 public class EncoderFactory {
     private static final Map<String, Encoder> DATA_MAP = new ConcurrentHashMap<>();
 

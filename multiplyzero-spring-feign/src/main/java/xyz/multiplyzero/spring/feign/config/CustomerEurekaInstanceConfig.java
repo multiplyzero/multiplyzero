@@ -16,6 +16,14 @@ import com.netflix.discovery.internal.util.Archaius1Utils;
 import xyz.multiplyzero.spring.feign.constants.Constants;
 import xyz.multiplyzero.spring.feign.constants.EurekaInstanceConfigConstants;
 
+/**
+ *
+ * CustomerEurekaInstanceConfig
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:11
+ */
 public class CustomerEurekaInstanceConfig extends AbstractInstanceConfig implements EurekaInstanceConfig {
 
     protected String namespace;

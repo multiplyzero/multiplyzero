@@ -14,6 +14,14 @@ import feign.RequestTemplate;
 import feign.codec.EncodeException;
 import feign.codec.Encoder;
 
+/**
+ *
+ * JacksonEncoder
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:00
+ */
 public class JacksonEncoder implements Encoder {
 
     private final ObjectMapper mapper;
@@ -34,8 +42,8 @@ public class JacksonEncoder implements Encoder {
     @Override
     public void encode(Object object, Type bodyType, RequestTemplate template) {
         try {
-            JavaType javaType = mapper.getTypeFactory().constructType(bodyType);
-            template.body(mapper.writerFor(javaType).writeValueAsString(object));
+            JavaType javaType = this.mapper.getTypeFactory().constructType(bodyType);
+            template.body(this.mapper.writerFor(javaType).writeValueAsString(object));
         } catch (JsonProcessingException e) {
             throw new EncodeException(e.getMessage(), e);
         }

@@ -14,6 +14,14 @@ import lombok.NoArgsConstructor;
 import xyz.multiplyzero.spring.feign.config.CustomerEurekaClientConfig;
 import xyz.multiplyzero.spring.feign.config.CustomerEurekaInstanceConfig;
 
+/**
+ *
+ * EurekaClientFactory
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:54
+ */
 public class EurekaClientFactory {
 
     private static final Map<EurekaConfig, EurekaClient> DATA_MAP = new ConcurrentHashMap<>();

@@ -4,6 +4,14 @@ import org.springframework.beans.factory.FactoryBean;
 
 import lombok.Setter;
 
+/**
+ *
+ * FeignClientFactoryBean
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:52:41
+ */
 public class FeignClientFactoryBean<T> implements FactoryBean<T> {
 
     @Setter
@@ -14,7 +22,6 @@ public class FeignClientFactoryBean<T> implements FactoryBean<T> {
 
     @Override
     public T getObject() throws Exception {
-        System.err.println("FeignClientFactoryBean get object");
         return this.object;
     }
 

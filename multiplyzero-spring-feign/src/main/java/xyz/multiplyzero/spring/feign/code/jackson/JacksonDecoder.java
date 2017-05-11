@@ -15,6 +15,14 @@ import feign.Response;
 import feign.Util;
 import feign.codec.Decoder;
 
+/**
+ *
+ * JacksonDecoder
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:52:55
+ */
 public class JacksonDecoder implements Decoder {
 
     private final ObjectMapper mapper;
@@ -52,7 +60,7 @@ public class JacksonDecoder implements Decoder {
                              // due to end-of-input"
             }
             reader.reset();
-            return mapper.readValue(reader, mapper.constructType(type));
+            return this.mapper.readValue(reader, this.mapper.constructType(type));
         } catch (RuntimeJsonMappingException e) {
             if (e.getCause() != null && e.getCause() instanceof IOException) {
                 throw IOException.class.cast(e.getCause());

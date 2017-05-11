@@ -6,6 +6,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import com.netflix.loadbalancer.AvailabilityFilteringRule;
 import com.netflix.loadbalancer.IRule;
 
+/**
+ *
+ * RuleFactory
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:54:04
+ */
 public class RuleFactory {
     private static final Map<String, IRule> DATA_MAP = new ConcurrentHashMap<>();
 

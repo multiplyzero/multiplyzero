@@ -16,6 +16,14 @@ import xyz.multiplyzero.spring.feign.anno.FeignClient;
 import xyz.multiplyzero.spring.feign.constants.Constants;
 import xyz.multiplyzero.spring.feign.scan.FeignClientScanner;
 
+/**
+ *
+ * FeignClientPostProcessor
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:52:50
+ */
 public class FeignClientPostProcessor implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
 
     @Setter
@@ -60,8 +68,13 @@ public class FeignClientPostProcessor implements ApplicationContextAware, BeanDe
     }
 
     public void setDefaultConfigFile(String defaultConfigFile) {
-        this.defaultConfigFile = defaultConfigFile;
-        System.setProperty("eureka.client.props", defaultConfigFile);
+        int index = defaultConfigFile.indexOf(".properties");
+        if (index > -1) {
+            this.defaultConfigFile = defaultConfigFile.substring(0, index);
+        } else {
+            this.defaultConfigFile = defaultConfigFile;
+        }
+        // System.setProperty("eureka.client.props", defaultConfigFile);
     }
 
 }

@@ -1,5 +1,13 @@
 package xyz.multiplyzero.spring.feign.constants;
 
+/**
+ *
+ * TransportConfigConstants
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月11日 下午4:53:38
+ */
 final public class TransportConfigConstants {
 
     // NOTE: all keys are before any prefixes are applied
