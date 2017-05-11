@@ -15,7 +15,7 @@ import xyz.multiplyzero.spring.feign.anno.FeignClient;
 
 public class ServerFactory {
 
-    public static Server getInstants(EurekaClient eurekaClient, FeignClient feignClient) {
+    public static Server getInstants(final EurekaClient eurekaClient, FeignClient feignClient) {
         ServerList<DiscoveryEnabledServer> serverList = new DiscoveryEnabledNIWSServerList(
                 feignClient.eurekaServiceId(), new Provider<EurekaClient>() {
                     @Override
@@ -28,7 +28,8 @@ public class ServerFactory {
 
         AbstractLoadBalancer lb = LoadBalancerBuilder.<DiscoveryEnabledServer>newBuilder()
                 .withDynamicServerList(serverList).withRule(rule)
-                .withServerListFilter(new ZoneAffinityServerListFilter<>()).buildDynamicServerListLoadBalancer();
+                .withServerListFilter(new ZoneAffinityServerListFilter<DiscoveryEnabledServer>())
+                .buildDynamicServerListLoadBalancer();
         Server server = lb.chooseServer();
         return server;
     }

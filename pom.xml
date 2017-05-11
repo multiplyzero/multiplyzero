@@ -7,7 +7,6 @@
     <packaging>pom</packaging>
     <modules>
         <module>multiplyzero-zipkin</module>
-        <module>multiplyzero-zipkin-client</module>
         <module>multiplyzero-utils</module>
         <module>multiplyzero-promise</module>
         <module>multiplyzero-spring-feign</module>
@@ -18,7 +17,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
 
-        <spring.version>4.3.0.RELEASE</spring.version>
+        <spring.version>4.3.7.RELEASE</spring.version>
         <spring-data-commons-core.version>1.4.0.RELEASE</spring-data-commons-core.version>
         <spring-data-jpa.version>1.10.2.RELEASE</spring-data-jpa.version>
         <spring-data-redis.version>1.7.2.RELEASE</spring-data-redis.version>
@@ -152,10 +151,19 @@
     <repositories>
         <repository>
             <id>local-public</id>
-            <name>local-public</name>
             <url>http://10.6.104.232:8081/nexus/content/groups/public/</url>
+            <snapshots>
+                <enabled>true</enabled>
+                <updatePolicy>always</updatePolicy>
+            </snapshots>
         </repository>
     </repositories>
+    <pluginRepositories>
+        <pluginRepository>
+            <id>plugin-local-public</id>
+            <url>http://maven.aliyun.com/nexus/content/groups/public/</url>
+        </pluginRepository>
+    </pluginRepositories>
 
     <distributionManagement>
         <repository>

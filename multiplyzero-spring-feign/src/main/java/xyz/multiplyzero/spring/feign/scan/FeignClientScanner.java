@@ -2,12 +2,12 @@ package xyz.multiplyzero.spring.feign.scan;
 
 import java.util.Set;
 
-import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.util.StringUtils;
 
 import com.netflix.discovery.EurekaClient;
 import com.netflix.loadbalancer.Server;
@@ -52,7 +52,7 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                 Class<?> clazz = Class.forName(beanClassName);
                 FeignClient feignClient = clazz.getAnnotation(FeignClient.class);
                 String url = feignClient.value();
-                if (StringUtils.isBlank(url)) {
+                if (!StringUtils.hasText(url)) {
                     String eurekaNamespace = feignClient.eurekaNamespace();
                     String eurekaConfigFile = feignClient.eurekaConfigFile();
 
