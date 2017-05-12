@@ -1,20 +1,16 @@
 package xyz.multiplyzero.spring.feign.factory;
 
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.atomic.AtomicLong;
-
-import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
-
 import feign.Feign;
 import feign.Request;
-import feign.RequestInterceptor;
-import feign.RequestTemplate;
 import feign.Retryer;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import xyz.multiplyzero.spring.feign.anno.FeignClient;
+import xyz.multiplyzero.spring.feign.filter.CacheFilter;
+import xyz.multiplyzero.spring.feign.filter.ExecuteFilter;
+import xyz.multiplyzero.spring.feign.filter.LimitFilter;
+import xyz.multiplyzero.spring.feign.filter.MockFilter;
+import xyz.multiplyzero.spring.feign.handler.CustomerInvocationHandlerFactory;
 
 /**
  *
@@ -32,32 +28,25 @@ public class FeignFactory {
         Request.Options options = new Request.Options(feignClient.connectTimeoutMillis(),
                 feignClient.readTimeoutMillis());
 
+        CustomerInvocationHandlerFactory invocationFactory = CustomerInvocationHandlerFactory.create();
+        if (feignClient.mock()) {
+            invocationFactory.addFilter(new MockFilter());
+        }
+        if (feignClient.cache() > 0) {
+            invocationFactory.addFilter(new CacheFilter(feignClient.cache()));
+        }
+        if (feignClient.limit() > 0) {
+            invocationFactory.addFilter(new LimitFilter(feignClient.limit()));
+        }
+        if (feignClient.execute() > 0) {
+            invocationFactory.addFilter(new ExecuteFilter(feignClient.execute()));
+        }
+
         Feign.Builder builder = Feign.builder().retryer(retryer).options(options)
                 .decoder(DecoderFactory.getInstants(defaultDecoder, feignClient.decoder()))
                 .encoder(EncoderFactory.getInstants(defaultEncoder, feignClient.encoder()))
-                /*
-                 * .invocationHandlerFactory(new InvocationHandlerFactory() {
-                 *
-                 * @Override public InvocationHandler create(Target target,
-                 * Map<Method, MethodHandler> dispatch) { return new
-                 * InvocationHandler() {
-                 *
-                 * @Override public Object invoke(Object proxy, Method method,
-                 * Object[] args) throws Throwable { return null; } }; } })
-                 */
-                .requestInterceptor(new RequestInterceptor() {
-                    @Override
-                    public void apply(RequestTemplate template) {
-                        // template.
-                    }
-                });
-        LoadingCache<Long, AtomicLong> counter = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.SECONDS)
-                .build(new CacheLoader<Long, AtomicLong>() {
-                    @Override
-                    public AtomicLong load(Long key) throws Exception {
-                        return new AtomicLong(0);
-                    }
-                });
+                .invocationHandlerFactory(invocationFactory);
+
         return builder;
     }
 }

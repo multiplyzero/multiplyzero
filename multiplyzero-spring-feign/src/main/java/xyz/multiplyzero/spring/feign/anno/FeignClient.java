@@ -80,8 +80,23 @@ public @interface FeignClient {
     long retryMaxPeriod() default 5;
 
     /**
-     * 并发数
+     * 单秒中 单方法最大请求数
      */
-    int executes() default 40;
+    int execute() default 40;
+
+    /**
+     * 单方法并发数 limit
+     */
+    int limit() default 40;
+
+    /**
+     * 缓存时间 毫秒
+     */
+    long cache() default 0;
+
+    /**
+     * 降级
+     */
+    boolean mock() default false;
 
 }
