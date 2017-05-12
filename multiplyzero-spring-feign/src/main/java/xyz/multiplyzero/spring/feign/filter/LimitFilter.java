@@ -4,6 +4,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import xyz.multiplyzero.spring.feign.invoker.Invoker;
 
+/**
+ *
+ * LimitFilter
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月12日 下午4:01:55
+ */
 public class LimitFilter implements Filter {
 
     private int limit;

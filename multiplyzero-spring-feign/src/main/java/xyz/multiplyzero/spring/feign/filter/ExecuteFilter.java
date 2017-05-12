@@ -9,6 +9,14 @@ import com.google.common.cache.LoadingCache;
 
 import xyz.multiplyzero.spring.feign.invoker.Invoker;
 
+/**
+ *
+ * ExecuteFilter
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月12日 下午4:01:44
+ */
 public class ExecuteFilter implements Filter {
 
     private int execute;

@@ -7,6 +7,14 @@ import com.google.common.cache.CacheBuilder;
 
 import xyz.multiplyzero.spring.feign.invoker.Invoker;
 
+/**
+ *
+ * CacheFilter
+ *
+ * @author zhanxiaoyong
+ *
+ * @since 2017年5月12日 下午4:01:37
+ */
 public class CacheFilter implements Filter {
 
     private Cache<String, Object> data;

@@ -18,11 +18,6 @@
 
 package your.service.package;
 
-import java.util.List;
-
-import com.yiwugou.ms.redis.api.bo.demo.Foo;
-import com.yiwugou.product.bean.FeignClient;
-
 import feign.Param;
 import feign.RequestLine;
 
