@@ -1,8 +1,11 @@
 package xyz.multiplyzero.spring.feign.factory;
 
+import org.springframework.util.StringUtils;
+
 import feign.Feign;
 import feign.Request;
 import feign.Retryer;
+import feign.auth.BasicAuthRequestInterceptor;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import xyz.multiplyzero.spring.feign.anno.FeignClient;
@@ -29,6 +32,21 @@ public class FeignFactory {
                 feignClient.readTimeoutMillis());
 
         CustomerInvocationHandlerFactory invocationFactory = CustomerInvocationHandlerFactory.create();
+        FeignFactory.initFilter(invocationFactory, feignClient);
+        Feign.Builder builder = Feign.builder().retryer(retryer).options(options)
+                .decoder(DecoderFactory.getInstants(defaultDecoder, feignClient.decoder()))
+                .encoder(EncoderFactory.getInstants(defaultEncoder, feignClient.encoder()))
+                .invocationHandlerFactory(invocationFactory);
+
+        if (StringUtils.hasText(feignClient.basicAuth())) {
+            String[] str = StringUtils.split(feignClient.basicAuth(), ":");
+            builder.requestInterceptor(new BasicAuthRequestInterceptor(str[0], str[1]));
+        }
+
+        return builder;
+    }
+
+    private static final void initFilter(CustomerInvocationHandlerFactory invocationFactory, FeignClient feignClient) {
         if (feignClient.mock()) {
             invocationFactory.addFilter(new MockFilter());
         }
@@ -41,12 +59,5 @@ public class FeignFactory {
         if (feignClient.execute() > 0) {
             invocationFactory.addFilter(new ExecuteFilter(feignClient.execute()));
         }
-
-        Feign.Builder builder = Feign.builder().retryer(retryer).options(options)
-                .decoder(DecoderFactory.getInstants(defaultDecoder, feignClient.decoder()))
-                .encoder(EncoderFactory.getInstants(defaultEncoder, feignClient.encoder()))
-                .invocationHandlerFactory(invocationFactory);
-
-        return builder;
     }
 }

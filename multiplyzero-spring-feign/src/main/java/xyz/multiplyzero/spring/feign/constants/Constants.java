@@ -17,4 +17,8 @@ public class Constants {
     public static final String DEFAULT_CONFIG_NAMESPACE = "eureka";
 
     public static final String DEFAULT_CONFIG_FILE = "eureka-client";
+
+    public static final String HTTP = "http://";
+
+    public static final String NAMESPACE_RIBBON_ID_SPLIT = ".";
 }

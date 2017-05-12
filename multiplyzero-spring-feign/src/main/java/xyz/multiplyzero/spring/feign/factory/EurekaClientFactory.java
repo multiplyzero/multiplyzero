@@ -26,8 +26,6 @@ public class EurekaClientFactory {
 
     private static final Map<EurekaConfig, EurekaClient> DATA_MAP = new ConcurrentHashMap<>();
 
-    // private Interner<String> interner = Interners.<String>newWeakInterner();
-
     public static EurekaClient getInstants(String namespace, String configFile) {
         EurekaConfig eurekaConfig = new EurekaConfig(namespace, configFile);
         return EurekaClientFactory.getInstants(eurekaConfig);

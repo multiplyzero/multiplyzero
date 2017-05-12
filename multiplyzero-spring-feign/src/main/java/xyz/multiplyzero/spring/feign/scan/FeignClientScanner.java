@@ -1,5 +1,6 @@
 package xyz.multiplyzero.spring.feign.scan;
 
+import java.util.List;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -10,14 +11,15 @@ import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 import org.springframework.util.StringUtils;
 
 import com.netflix.discovery.EurekaClient;
-import com.netflix.loadbalancer.Server;
 
 import feign.Feign;
 import feign.codec.Decoder;
 import feign.codec.Encoder;
+import feign.ribbon.RibbonClient;
 import lombok.Setter;
 import xyz.multiplyzero.spring.feign.anno.FeignClient;
 import xyz.multiplyzero.spring.feign.bean.FeignClientFactoryBean;
+import xyz.multiplyzero.spring.feign.factory.ConfigurationFactory;
 import xyz.multiplyzero.spring.feign.factory.EurekaClientFactory;
 import xyz.multiplyzero.spring.feign.factory.FeignFactory;
 import xyz.multiplyzero.spring.feign.factory.ServerFactory;
@@ -67,14 +69,24 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                     String eurekaConfigFile = ObjectUtils.defaultIfHasText(feignClient.eurekaConfigFile(),
                             this.defaultConfigFile);
                     EurekaClient eurekaClient = EurekaClientFactory.getInstants(eurekaNamespace, eurekaConfigFile);
-                    Server server = ServerFactory.getInstants(eurekaClient, feignClient);
-                    url = UrlFactory.getInstants(server.getHost(), server.getPort());
+                    List<String> serverList = ServerFactory.getUrlList(eurekaClient, feignClient);
+                    ConfigurationFactory.setServices(eurekaNamespace, feignClient.eurekaServiceId(), serverList);
+                    url = UrlFactory.getBibbonUrl(eurekaNamespace, feignClient.eurekaServiceId());
+                    // Server server = ServerFactory.getInstants(eurekaClient,
+                    // feignClient);
+                    // url = UrlFactory.getInstants(server.getHost(),
+                    // server.getPort());
+                } else {
+                    ConfigurationFactory.setServices("defaultUrl", beanClassName, url);
+                    url = UrlFactory.getBibbonUrl("defaultUrl", beanClassName);
                 }
                 Feign.Builder builder = FeignFactory.getInstants(feignClient, this.defaultDecoder, this.defaultEncoder);
-                Object obj = builder.target(clazz, url);
+
+                Object obj = builder.client(RibbonClient.create()).target(clazz, url);
                 definition.setBeanClass(FeignClientFactoryBean.class);
                 definition.getPropertyValues().addPropertyValue("mapperInterface", clazz);
                 definition.getPropertyValues().addPropertyValue("object", obj);
+
             }
         } catch (Exception e) {
             e.printStackTrace();

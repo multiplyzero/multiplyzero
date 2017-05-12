@@ -6,7 +6,8 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.netflix.loadbalancer.IRule;
+import com.netflix.loadbalancer.AbstractLoadBalancer;
+import com.netflix.loadbalancer.BaseLoadBalancer;
 
 import feign.codec.Decoder;
 import feign.codec.Encoder;
@@ -52,7 +53,7 @@ public @interface FeignClient {
 
     Class<? extends Decoder> decoder() default JacksonDecoder.class;
 
-    Class<? extends IRule> rule() default IRule.class;
+    Class<? extends AbstractLoadBalancer> loadBalancer() default BaseLoadBalancer.class;
 
     /**
      * 重试次数
@@ -98,5 +99,10 @@ public @interface FeignClient {
      * 降级
      */
     boolean mock() default false;
+
+    /**
+     * username:password
+     */
+    String basicAuth() default "";
 
 }
