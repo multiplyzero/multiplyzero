@@ -6,9 +6,6 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import com.netflix.loadbalancer.AbstractLoadBalancer;
-import com.netflix.loadbalancer.BaseLoadBalancer;
-
 import feign.codec.Decoder;
 import feign.codec.Encoder;
 import xyz.multiplyzero.spring.feign.code.jackson.JacksonDecoder;
@@ -53,7 +50,12 @@ public @interface FeignClient {
 
     Class<? extends Decoder> decoder() default JacksonDecoder.class;
 
-    Class<? extends AbstractLoadBalancer> loadBalancer() default BaseLoadBalancer.class;
+    /**
+     * 暂未实现
+     */
+    // @Deprecated
+    // Class<? extends AbstractLoadBalancer> loadBalancer() default
+    // BaseLoadBalancer.class;
 
     /**
      * 重试次数
