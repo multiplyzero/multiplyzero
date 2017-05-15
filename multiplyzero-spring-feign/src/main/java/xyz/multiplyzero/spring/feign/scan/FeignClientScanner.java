@@ -1,6 +1,7 @@
 package xyz.multiplyzero.spring.feign.scan;
 
 import java.util.List;
+import java.util.Properties;
 import java.util.Set;
 
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -36,13 +37,15 @@ import xyz.multiplyzero.spring.feign.utils.ObjectUtils;
  */
 public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
     @Setter
-    private String defaultNamespace;
+    private String eurekaNamespace;
     @Setter
-    private String defaultConfigFile;
+    private String eurekaConfigFile;
     @Setter
     private Decoder defaultDecoder;
     @Setter
     private Encoder defaultEncoder;
+    @Setter
+    private Properties properties;
 
     public FeignClientScanner(BeanDefinitionRegistry registry) {
         super(registry);
@@ -65,9 +68,9 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                 String url = feignClient.value();
                 if (!StringUtils.hasText(url)) {
                     String eurekaNamespace = ObjectUtils.defaultIfHasText(feignClient.eurekaNamespace(),
-                            this.defaultNamespace);
+                            this.eurekaNamespace);
                     String eurekaConfigFile = ObjectUtils.defaultIfHasText(feignClient.eurekaConfigFile(),
-                            this.defaultConfigFile);
+                            this.eurekaConfigFile);
                     EurekaClient eurekaClient = EurekaClientFactory.getInstants(eurekaNamespace, eurekaConfigFile);
                     List<String> serverList = ServerFactory.getUrlList(eurekaClient, feignClient);
                     ConfigurationFactory.setServices(eurekaNamespace, feignClient.eurekaServiceId(), serverList);
@@ -77,6 +80,7 @@ public class FeignClientScanner extends ClassPathBeanDefinitionScanner {
                     // url = UrlFactory.getInstants(server.getHost(),
                     // server.getPort());
                 } else {
+                    url = UrlFactory.replacePlaceholder(url, this.properties);
                     ConfigurationFactory.setServices("defaultUrl", beanClassName, url);
                     url = UrlFactory.getBibbonUrl("defaultUrl", beanClassName);
                 }

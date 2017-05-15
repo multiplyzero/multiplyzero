@@ -1,12 +1,18 @@
 package xyz.multiplyzero.spring.feign.bean;
 
+import java.lang.reflect.Method;
+import java.util.Properties;
+
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProcessor;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
+import org.springframework.core.io.support.PropertiesLoaderSupport;
 import org.springframework.core.type.filter.AnnotationTypeFilter;
+import org.springframework.util.ReflectionUtils;
 import org.springframework.util.StringUtils;
 
 import feign.codec.Decoder;
@@ -27,18 +33,26 @@ import xyz.multiplyzero.spring.feign.scan.FeignClientScanner;
 public class FeignClientPostProcessor implements ApplicationContextAware, BeanDefinitionRegistryPostProcessor {
 
     @Setter
-    private String defaultNamespace = Constants.DEFAULT_CONFIG_NAMESPACE;
+    private String eurekaNamespace = Constants.DEFAULT_CONFIG_NAMESPACE;
 
-    private String defaultConfigFile = Constants.DEFAULT_CONFIG_FILE;
+    private String eurekaConfigFile = Constants.DEFAULT_CONFIG_FILE;
 
     @Setter
     private Decoder defaultDecoder;
     @Setter
     private Encoder defaultEncoder;
 
+    private Properties properties;
+
     private ApplicationContext applicationContext;
 
     private String[] packages;
+
+    public void setPropertiesLoaderSupport(PropertiesLoaderSupport propertiesLoaderSupport) {
+        Method method = ReflectionUtils.findMethod(PropertyPlaceholderConfigurer.class, "mergeProperties");
+        ReflectionUtils.makeAccessible(method);
+        this.properties = (Properties) ReflectionUtils.invokeMethod(method, propertiesLoaderSupport);
+    }
 
     public void setPackage(String annotationPackage) {
         this.packages = StringUtils.hasText(annotationPackage) ? Constants.COMMA_SPLIT_PATTERN.split(annotationPackage)
@@ -52,27 +66,28 @@ public class FeignClientPostProcessor implements ApplicationContextAware, BeanDe
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-
+        beanFactory.getBeanDefinition("").getPropertyValues();
     }
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry registry) throws BeansException {
         FeignClientScanner scanner = new FeignClientScanner(registry);
-        scanner.setDefaultConfigFile(this.defaultConfigFile);
-        scanner.setDefaultNamespace(this.defaultNamespace);
+        scanner.setEurekaConfigFile(this.eurekaConfigFile);
+        scanner.setEurekaNamespace(this.eurekaNamespace);
         scanner.setDefaultDecoder(this.defaultDecoder);
         scanner.setDefaultEncoder(this.defaultEncoder);
         scanner.setResourceLoader(this.applicationContext);
+        scanner.setProperties(this.properties);
         scanner.addIncludeFilter(new AnnotationTypeFilter(FeignClient.class));
         scanner.scan(this.packages);
     }
 
-    public void setDefaultConfigFile(String defaultConfigFile) {
-        int index = defaultConfigFile.indexOf(".properties");
+    public void setEurekaConfigFile(String eurekaConfigFile) {
+        int index = eurekaConfigFile.indexOf(".properties");
         if (index > -1) {
-            this.defaultConfigFile = defaultConfigFile.substring(0, index);
+            this.eurekaConfigFile = eurekaConfigFile.substring(0, index);
         } else {
-            this.defaultConfigFile = defaultConfigFile;
+            this.eurekaConfigFile = eurekaConfigFile;
         }
         // System.setProperty("eureka.client.props", defaultConfigFile);
     }
