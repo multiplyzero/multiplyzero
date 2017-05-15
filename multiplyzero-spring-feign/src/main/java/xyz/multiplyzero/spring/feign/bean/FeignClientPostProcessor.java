@@ -66,7 +66,7 @@ public class FeignClientPostProcessor implements ApplicationContextAware, BeanDe
 
     @Override
     public void postProcessBeanFactory(ConfigurableListableBeanFactory beanFactory) throws BeansException {
-        beanFactory.getBeanDefinition("").getPropertyValues();
+
     }
 
     @Override
